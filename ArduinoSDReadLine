@@ -2,15 +2,16 @@
 #include <SD.h>
 
 File myFile;
+char output;
 
 void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
   Serial.print("Initializing SD card...");
-  pinMode(10, OUTPUT);
   
-  if (!SD.begin(4)) {
+  
+  if (!SD.begin(10, 11, 12, 13)) {
     Serial.println("initialization failed!");
     return;
   }
@@ -19,15 +20,15 @@ void setup()
   // re-open the file for reading:
   myFile = SD.open("data.txt");
   if (myFile) {
+    
     Serial.println("data.txt:");
     // Read from the file until there's nothing else in it:
     while (myFile.available()) {
       // Read until we hit the end of the a line
       if (myFile.peek() == '\n'){
-        Serial.println("NEW LINE")
-        delay(3000);
       }
-      Serial.write(myFile.read());
+      output = myFile.read();
+     Serial.print(String(output));
     }
     // close the file:
     myFile.close();
